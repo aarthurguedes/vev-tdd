@@ -3,3 +3,7 @@ class Invoice:
         self.date = date
         self.value = value
         self.client_name = client_name
+        self.payments = []
+
+    def add_payment(self, payment):
+        self.payments.append(payment)
