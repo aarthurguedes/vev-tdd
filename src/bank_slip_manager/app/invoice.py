@@ -7,3 +7,12 @@ class Invoice:
 
     def add_payment(self, payment):
         self.payments.append(payment)
+
+    def is_paid(self):
+        total = 0
+
+        for payment in self.payments:
+            total += payment.value
+        
+        return total >= self.value
+

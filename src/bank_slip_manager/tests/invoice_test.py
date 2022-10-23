@@ -30,6 +30,28 @@ class Invoice_Test(unittest.TestCase):
 
         self.assertEqual(all_payments, 1)
 
+    def test_invoice_is_paid_method(self):
+        now = datetime.datetime.now()
+        payment_type = "BOLETO"
+
+        payment1 = Payment(now, 2000, payment_type)
+        payment2 = Payment(now, 2398.20, payment_type)
+        payment3 = Payment(now, 1234, payment_type)
+
+        invoice1 = self.create_invoice()
+
+        invoice1.add_payment(payment1)
+        invoice1.add_payment(payment2)
+
+        self.assertTrue(invoice1.is_paid())
+
+        invoice2 = self.create_invoice()
+
+        invoice2.add_payment(payment1)
+        invoice2.add_payment(payment3)
+
+        self.assertFalse(invoice2.is_paid())
+
 
 if __name__ == '__main__':
     unittest.main()
