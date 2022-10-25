@@ -2,8 +2,10 @@ from app.invoice import Invoice
 from app.bill_of_sale import BillOfSale
 
 class BillOfSaleGenerator():
-  def __init__(self):
-    pass
+  def __init__(self, smtp_service, sap_service, dao):
+    self.smtp_service = smtp_service
+    self.sap_service = sap_service
+    self.dao = dao
 
   def generate(self, invoice):
     if not isinstance(invoice, Invoice):
