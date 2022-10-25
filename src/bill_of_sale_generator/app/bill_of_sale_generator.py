@@ -12,6 +12,11 @@ class BillOfSaleGenerator():
       raise TypeError('invoice (param) must be Invoice')
     
     bill_of_sale = BillOfSale(invoice.client_name, invoice.value, self.calc_tax_value(invoice.service_type, invoice.value))
+
+    self.smtp_service.send(bill_of_sale)
+    self.sap_service.send(bill_of_sale)
+    self.dao.save(bill_of_sale)
+
     return bill_of_sale
   
   def calc_tax_value(self, invoice_service_type, invoice_value):

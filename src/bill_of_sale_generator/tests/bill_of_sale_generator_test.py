@@ -46,3 +46,24 @@ class TesteBillOfSaleGenerator(unittest.TestCase):
     self.assertEqual(generator.calc_tax_value(invoiceConsultancy.service_type, invoiceConsultancy.value), 50)
     self.assertEqual(generator.calc_tax_value(invoiceTraining.service_type, invoiceTraining.value), 30)
     self.assertEqual(generator.calc_tax_value(invoiceOther.service_type, invoiceOther.value), 12)
+
+  @patch('app.smtp.SMTP')
+  @patch('app.sap.SAP')
+  @patch('app.bill_of_sale_dao.BillOfSaleDAO')
+  def test_generate_post_actions(self, MockSMTP, MockSAP, MockBillOfSaleDAO):    
+    smtp = MockSMTP()
+    smtp.send = MagicMock(return_value=True)
+
+    sap = MockSAP()
+    sap.send = MagicMock(return_value=True)
+
+    dao = MockBillOfSaleDAO()
+    dao.save = MagicMock(return_value=True)
+
+    invoiceConsultancy = Invoice('Arthur', '9840 International Dr, Orlando, Florida, US', 'CONSULTANCY', 200)
+    generator = BillOfSaleGenerator(smtp, sap, dao)
+    generator.generate(invoiceConsultancy)
+
+    self.assertTrue(smtp.send.called)
+    self.assertTrue(sap.send.called)
+    self.assertTrue(dao.save.called)
